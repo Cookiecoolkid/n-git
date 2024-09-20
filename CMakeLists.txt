@@ -20,6 +20,7 @@ set(SOURCES
     sha1.cpp
     apis.cpp
     main.cpp
+    func.cpp
 )
 
 # 创建可执行文件

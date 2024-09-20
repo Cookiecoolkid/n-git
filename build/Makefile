@@ -153,6 +153,30 @@ apis.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/apis.cpp.s
 .PHONY : apis.cpp.s
 
+func.o: func.cpp.o
+.PHONY : func.o
+
+# target to build an object file
+func.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/func.cpp.o
+.PHONY : func.cpp.o
+
+func.i: func.cpp.i
+.PHONY : func.i
+
+# target to preprocess a source file
+func.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/func.cpp.i
+.PHONY : func.cpp.i
+
+func.s: func.cpp.s
+.PHONY : func.s
+
+# target to generate assembly for a file
+func.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/func.cpp.s
+.PHONY : func.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -213,6 +237,9 @@ help:
 	@echo "... apis.o"
 	@echo "... apis.i"
 	@echo "... apis.s"
+	@echo "... func.o"
+	@echo "... func.i"
+	@echo "... func.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
