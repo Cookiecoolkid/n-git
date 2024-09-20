@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/nit.dir/sha1.cpp.o CMakeFiles/nit.dir/apis.cpp.o CMakeFiles/nit.dir/main.cpp.o -o nit 

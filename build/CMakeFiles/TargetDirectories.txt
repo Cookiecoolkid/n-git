@@ -1,0 +1,3 @@
+/home/cookiecoolkid/project/nit/build/CMakeFiles/nit.dir
+/home/cookiecoolkid/project/nit/build/CMakeFiles/edit_cache.dir
+/home/cookiecoolkid/project/nit/build/CMakeFiles/rebuild_cache.dir
