@@ -30,7 +30,7 @@ void Commands::init() {
         std::cerr << "Failed to create a Nit version-control system: " << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
-
+    /*
     std::string emptyTreeContent = "";
     std::string emptyTreeSha1 = UsefulApi::hash(emptyTreeContent);
     std::string emptyTreePath = ".nit/objects/" + emptyTreeSha1.substr(0, 2) + "/" + emptyTreeSha1.substr(2);
@@ -49,8 +49,9 @@ void Commands::init() {
 
     // Update HEAD to point to the current commit
     UsefulApi::writeToFile(commitSha1, ".nit/HEAD");
-
+    
     commit(initMsg);
+    */
 }
 
 void Commands::status() {
