@@ -18,15 +18,41 @@ Parser(int argc, char** argv): argc(argc), argv(argv) {}
     void printUsageAndExit();
 };
 
+class Functions {
+public: 
+    std::string extractContent(const std::string& content, const std::string& start, const std::string& end);
+    std::string extractContentPlus(const std::string& content, const std::string& start, const std::string& end);
+    void eraseSubstrFromContent(const std::string& substr, std::string& content, const std::string& contentPath);
+    void removeLineContainingSubstringFromContent(std::string& content, const std::string& substr);
+    void removeFileAndEmptyDirectory(const std::string& dir, const std::string& filename);
+};
+
+
 class Blob {
     std::string content;
     std::string sha1;
-public                          : 
-Blob(const std::string& content): content(content) {
-    sha1 = UsefulApi::hash(content);
-}
+    std::string filename;
+public:
+    enum class BlobStatus {
+        UNCHECKED,
+        SAME,
+        ADD,
+        MODIFIED,
+        REMOVED,
+        NOTEXIST
+    };
+private:
+    BlobStatus status = BlobStatus::UNCHECKED;
+
+public                                                   : 
+Blob(const std::string& content, const std::string& sha1, const std::string& filename)
+    : content(content), sha1(sha1), filename(filename) {}
+    void writeBlobAndIndex(BlobStatus status);
     std::string getContent() const;
     std::string getSha1() const;
+    BlobStatus getStatus() const;
+
+    void checkBlobState();
 };
 
 class Tree {
@@ -68,7 +94,6 @@ Commit(const std::string& msg, const std :: string& commitContent, const std::st
 ~Commit() {
     // TODO
 }    
-
     void writeTreeCommitLogHEAD();
 };
 
@@ -90,10 +115,10 @@ public:
     }
     void init();
     void status();
-    void add();
+    void add(const std::string& filename);
     void checkout();
     void log();
     void commit(const std::string& msg);
 };
 
-#endif 
+#endif

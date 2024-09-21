@@ -5,6 +5,7 @@
 
 namespace fs = std::filesystem;
 
+#define DEBUG(x) std::cerr << #x << " " << x << std::endl
 
 bool Commands:: checkNitDirectory() {
     fs::path path(currentPath);
@@ -40,7 +41,6 @@ void Commands::init() {
     
     const std::string initMsg = "initial commit";
     commit(initMsg);
-    
 }
 
 void Commands::status() {
@@ -48,9 +48,58 @@ void Commands::status() {
     checkInit();
 }
 
-void Commands::add() {
+void Commands::add(const std::string& filename) {
       // TODO
     checkInit();
+      // add: Create file blob object and write to .nit/objects
+      // update file "index" after checking the file got already added/modified/removed or not
+    
+    std::string filePath = UsefulApi::cwd() + "/" + filename;
+    std::string fileContent;
+    std::string fileSha1;
+    std::string indexPath = UsefulApi::cwd() + "/.nit/index";
+    std::string indexContent;
+    Functions functions;
+
+    if (!UsefulApi::readFromFile(indexPath, indexContent)) {
+        std::cerr << "Failed to read file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    if (!UsefulApi::readFromFile(filePath, fileContent)) {
+        std::cerr << "Try to add a removed file or file not exist" << std::endl;
+        fileContent = "";
+    }
+    
+    // TIP
+    std::string filenameCatContent = filename + "\n" + fileContent;
+
+    fileSha1 = UsefulApi::hash(filenameCatContent);
+
+    Blob blob(fileContent, fileSha1, filename);
+
+    blob.checkBlobState();
+    Blob::BlobStatus status = blob.getStatus();
+
+
+    if (status == Blob::BlobStatus::ADD || status == Blob::BlobStatus::MODIFIED) {
+        blob.writeBlobAndIndex(status);
+    } else if (status == Blob::BlobStatus::SAME || status == Blob::BlobStatus::REMOVED) {
+        //FIXME : doesn't work to remove successfully
+        functions.removeLineContainingSubstringFromContent(indexContent, filename);
+        std::string blobSha1_old = functions.extractContentPlus(indexContent, "\n", " " + filename);
+        // FIXME : out of range for substr
+        std::string blobFilename_old = blobSha1_old.substr(2);
+        std::string blobDir_old = UsefulApi::cwd() + "/.nit/objects/" + blobSha1_old.substr(0, 2);
+
+        functions.removeFileAndEmptyDirectory(blobDir_old, blobFilename_old);
+    } else if (status == Blob::BlobStatus::NOTEXIST) {
+        std::cerr << "File does not exist." << std::endl;
+        std::exit(EXIT_FAILURE);
+    } else {
+        std::cerr << "Add fail: Unchecked or unknown status." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 void Commands::checkout() {
@@ -59,8 +108,16 @@ void Commands::checkout() {
 }
 
 void Commands::log() {
-      // TODO
     checkInit();
+    std::string logPath = UsefulApi::cwd() + "/.nit/log";
+    std::string logContent;
+
+    if (!UsefulApi::readFromFile(logPath, logContent)) {
+        std::cerr << "Failed to read file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    std::cout << logContent << std::endl;
 }
 
 void Commands::commit(const std::string& msg) { 
@@ -126,7 +183,7 @@ void Commands::commit(const std::string& msg) {
     commitCommand = new Commit(msg, commitContent, commitSha1, commitPath, parentSha1, tree);
     commitCommand->writeTreeCommitLogHEAD();
 
-    // TODO
+    // FIXME： Should I delete here?
     delete tree;
 }
 
@@ -134,6 +191,7 @@ void Commit::writeTreeCommitLogHEAD() {
     std::string treePath = tree->getTreePath();
     std::string logPath  = UsefulApi::cwd() + "/.nit/log";
     std::string headPath = UsefulApi::cwd() + "/.nit/HEAD";
+    std::string indexPath = UsefulApi::cwd() + "/.nit/index";
 
     std::string treeContent = tree->getTreeContent();
     std::string logContent = "===\ncommit " + commitSha1 + "\n" + msg + "\n";
@@ -155,6 +213,12 @@ void Commit::writeTreeCommitLogHEAD() {
     }
 
     std::cout << "commit: "  << this->msg << std::endl << "OK!" << std::endl;
+
+    // clear "index"
+    if (!UsefulApi::writeToFile("", indexPath)) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 void Tree::addFile(const std::string& fileName, const std::string& sha1) {
@@ -177,6 +241,210 @@ const std::map<std::string, std::string>& Tree::getFiles() const {
     return files;
 }
 
+std::string Blob::getContent() const {
+    return content;
+}
+
+std::string Blob::getSha1() const {
+    return sha1;
+}
+
+Blob::BlobStatus Blob::getStatus() const {
+    return status;
+}
+
+void Blob::checkBlobState() {
+    Functions functions;
+
+    std::string filePath = UsefulApi::cwd() + "/" + filename;
+    std::string fileContent;
+
+    std::string indexPath = UsefulApi::cwd() + "/.nit/index";
+    std::string indexContent;
+
+    std::string headPath = UsefulApi::cwd() + "/.nit/HEAD";
+    std::string headContent;
+
+    if (!UsefulApi::readFromFile(indexPath, indexContent) && 
+        !UsefulApi::readFromFile(headPath, headContent)) {
+        std::cerr << "Failed to read file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+
+    // Can't read content means file NOTEXIST or REMOVED
+    if (!UsefulApi::readFromFile(filePath, fileContent)) {
+        std::string substr = filename;
+        size_t      found  = indexContent.find(substr);
+
+        if (found != std::string::npos) {
+            status = BlobStatus::REMOVED;
+        } else {
+            status = BlobStatus::NOTEXIST;
+        }
+        return;
+    }
+
+    // FIXME haven't check the FUNCTION "SAME"
+    // Check "SAME" status: This file is the same as that in current commit
+    if (!headContent.empty()){
+        std::string currentCommitPath = UsefulApi::cwd() + "/.nit/objects/" + headContent.substr(0, 2) + "/" + headContent.substr(2);
+        std::string currentCommitContent;
+        std::string currentCommitTreePath;
+        std::string currentCommitTreeContent;
+
+        if (!UsefulApi::readFromFile(currentCommitPath, currentCommitContent)) {
+            std::cerr << "Failed to read file" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+
+
+        std::string treeSha1 = functions.extractContent(currentCommitContent, "tree:", "\n");
+        currentCommitTreePath = UsefulApi::cwd() + "/.nit/objects/" + treeSha1.substr(0, 2) + "/" + treeSha1.substr(2);
+        
+        if (!UsefulApi::readFromFile(currentCommitTreePath, currentCommitTreeContent)) {
+            std::cerr << "Failed to read file" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+
+        if (currentCommitTreeContent.find(sha1) != std::string::npos) {
+            status = BlobStatus::SAME;
+            return;
+        }
+    }
+          // Check "ADD" & "MODIFIED" status: This file is added in the current commit
+          // By comparing the filename
+    if (indexContent.find(filename) == std::string::npos) {
+        status = BlobStatus::ADD;
+    } else {
+        status = BlobStatus::MODIFIED;
+    }
+}
+
+void Blob::writeBlobAndIndex(BlobStatus status) {
+    //TODO
+    // MODIFIED: Delete the old file blob & index and then write the new file & index
+    // ADD: Write the new file & index
+
+
+    std::string indexPath = UsefulApi::cwd() + "/.nit/index";  
+    Functions functions;
+        // Delete the old file blob & index
+    if (status == BlobStatus::MODIFIED) {
+        std::string indexContent;
+
+        if (!UsefulApi::readFromFile(indexPath, indexContent)) {
+            std::cerr << "Failed to read file" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+       
+            // find the sha1 by filename in indexContent
+            // TIP blobSha1_old can be found in first line, which can't match "\n"
+        std::string blobSha1_old = functions.extractContentPlus(indexContent, "\n", " " + filename);
+
+        DEBUG(blobSha1_old);
+
+        std::string blobFilename_old = blobSha1_old.substr(2);
+        std::string blobDir_old  = UsefulApi::cwd() + "/.nit/objects/" + blobSha1_old.substr(0, 2);
+
+        functions.removeFileAndEmptyDirectory(blobDir_old, blobFilename_old);
+
+        functions.eraseSubstrFromContent(blobSha1_old + " " + filename + "\n", indexContent, indexPath);
+
+        DEBUG(indexContent);
+    }
+
+
+          // Write the new file blob & index
+    std::string blobFilenameCatContent = filename + "\n" + content;
+    std::string blobPath     = UsefulApi::cwd() + "/.nit/objects/" + sha1.substr(0, 2) + "/" + sha1.substr(2);
+    std::string indexContent = sha1 + " " + filename + "\n";
+    std::string indexContent_old;
+
+    if (!UsefulApi::readFromFile(indexPath, indexContent_old)) {
+        std::cerr << "Failed to read file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    indexContent = indexContent + indexContent_old;
+
+    if (!UsefulApi::writeToFile(blobFilenameCatContent, blobPath)) {   
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    if (!UsefulApi::writeToFile(indexContent, indexPath)) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+}
+
+  /**
+ * @brief If [filename, sha1] exists in the index, erase it.
+ */
+void Functions::eraseSubstrFromContent(const std::string& substr, std::string& content, 
+    const std::string& contentPath) {
+    size_t      found  = content.find(substr);
+    if (found != std::string::npos) {
+        content.erase(found, substr.length());
+    }
+
+    if (!UsefulApi::writeToFile(content, contentPath)) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
+
+std::string Functions:: extractContent(const std::string& content, const std::string& start, const std::string& end) {
+    size_t startPos = content.find(start);
+    size_t endPos = content.find(end, startPos + start.length());
+    if (startPos == std::string::npos || endPos == std::string::npos) {
+        return "";
+    }
+    return content.substr(startPos + start.length(), endPos - startPos - start.length());
+}
+
+std::string Functions::extractContentPlus(const std::string& content, const std::string& start, const std::string& end) {
+    std::string substr = extractContent(content, start, end);
+
+    if (substr.empty()) {
+        substr = extractContent(content, "", end);
+    }
+    return substr;
+}
+
+void Functions::removeLineContainingSubstringFromContent
+    (std::string& content, const std::string& substr) {
+    std::istringstream stream(content);
+    std::ostringstream result;
+    std::string line;
+
+    while (std::getline(stream, line)) {
+        if (line.find(substr) == std::string::npos) {
+            result << line << '\n';
+        }
+    }
+    content = result.str();   
+}
+
+void Functions::removeFileAndEmptyDirectory(const std::string& dir, const std::string& filename) {
+    fs::path path(dir);
+    fs::path file = path / filename;
+
+    if (!fs::remove(file)) {
+        std::cerr << "Failed to remove file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    if (fs::is_empty(dir)) {
+        if (!fs::remove(dir)) {
+            std::cerr << "Failed to remove directory: " << dir << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+    }
+}
+
 void Parser::getArgs() {
     for (int i = 0; i < argc; i++) {
         args.push_back(argv[i]);
@@ -196,7 +464,7 @@ void Parser::parse() {
         commands.status();
     } else if (args[1] == "add") {
         if (args.size() != 3) printUsageAndExit();
-        commands.add();
+        commands.add(args[2]);
     } else if (args[1] == "checkout") {
         if (args.size() != 3) printUsageAndExit();
         commands.checkout();
@@ -223,12 +491,4 @@ void Parser::printUsageAndExit() {
     std::cerr << "  log                     Show commit hash value and msg" << std::endl;
     std::cerr << "  commit <msg>            Record changes to the repository" << std::endl;
     std::exit(EXIT_FAILURE);
-}
-
-std::string Blob::getContent() const {
-    return content;
-}
-
-std::string Blob::getSha1() const {
-    return sha1;
 }

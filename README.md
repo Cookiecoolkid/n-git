@@ -25,6 +25,8 @@
     - ```commit```文件格式为```hash\nparent\nmsg```，其中```hash```为对应的```tree```对象的```hash```，```parent```为```commit```对象的```hash```，```msg```为```commit```的```msg```
 - 上述文件名为```hash```的前两位字符，作为目录名，后38位字符作为文件名，如```objects/12/3456789abcdef0123456789abcdef01234567```
 
+- 当 ```tree``` 为空时，若没有内容，则可能与空的```blob``` 冲突，所以需要作出区分
+
 
 ### ```map<std::string filename, std::string fileSha1>```
 - ```filename```为文件名，```fileSha1```为文件内容的```hash```
