@@ -32,33 +32,51 @@ Blob(const std::string& content): content(content) {
 class Tree {
     // TODO subTrees for sub directories
     // std::vector<Tree*> subTrees;
-    std::vector<std::pair<std::string, std::string>> files;
+    // std::vector<std::pair<std::string, std::string>> files;
+    std::string treeSha1;
+    std::string treeContent;
+    std::string treePath;
 
-public: 
-    void addFile(const std::string& fileName, std::string& sha1);
+    // TODO
+    std::map<std::string, std::string> files;  // filename -> fileSha1
+
+public:
+    Tree(const std::string& treeSha1, const std::string& treeContent, const std::string& treePath)
+        : treeSha1(treeSha1), treeContent(treeContent), treePath(treePath) {}
+
+    void addFile(const std::string& fileName, const std::string& sha1);
+
+    std::string getTreeSha1() const;
+    std::string getTreeContent() const;
+    std::string getTreePath() const;
+    const std::map<std::string, std::string>& getFiles() const;
 };
 
 class Commit {
-    const  std::string msg      = "";
-    const  std::string commitId = "";
-    Commit * parent             = nullptr;
-    Tree   * tree               = nullptr;
+    const std::string msg           = "";
+    const std::string commitContent = "";
+    const std::string commitSha1    = "";
+    const std::string commitPath    = "";
+    const std::string parentSha1    = "";
+    Tree  * tree                    = nullptr;
     
-public                                                                                 : 
-Commit(const std::string& msg, const std::string& commitId, Commit* parent, Tree* tree): 
-    msg(msg), commitId(commitId), parent(parent), tree(tree) {}
-
+public                                                                                                                                      : 
+Commit(const std::string& msg, const std :: string& commitContent, const std::string& commitSha1, 
+    const std::string& commitPath, const std::string& parentSha1, Tree* tree):
+    msg(msg), commitContent(commitContent), commitSha1(commitSha1), commitPath(commitPath),
+    parentSha1(parentSha1), tree(tree) {}
 ~Commit() {
     // TODO
 }    
 
-    void addCommit();
+    void writeTreeCommitLogHEAD();
 };
 
 
 class Commands {
     std:: string currentPath;
-    bool checkNitDirectory(const std::string& currentPath);
+    bool checkNitDirectory();
+    void checkInit();
 
     Commit * commitCommand;
 public: 

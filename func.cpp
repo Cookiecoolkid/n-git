@@ -6,15 +6,22 @@
 namespace fs = std::filesystem;
 
 
-bool Commands:: checkNitDirectory(const std::string& currentPath) {
+bool Commands:: checkNitDirectory() {
     fs::path path(currentPath);
     fs::path nitDirectory = path / ".nit";
 
     return fs::exists(nitDirectory) && fs::is_directory(nitDirectory);
 }
 
+void Commands::checkInit() {
+    if (!checkNitDirectory()) {
+        std::cerr << "Not a Nit repository" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
+
 void Commands::init() {
-    if (checkNitDirectory(currentPath)) {
+    if (checkNitDirectory()) {
         std::cerr << "A Nit version-control system already exists in the current directory." << std::endl;
         std::exit(EXIT_FAILURE);
     }
@@ -30,62 +37,145 @@ void Commands::init() {
         std::cerr << "Failed to create a Nit version-control system: " << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    /*
-    std::string emptyTreeContent = "";
-    std::string emptyTreeSha1 = UsefulApi::hash(emptyTreeContent);
-    std::string emptyTreePath = ".nit/objects/" + emptyTreeSha1.substr(0, 2) + "/" + emptyTreeSha1.substr(2);
-    fs::create_directories(fs::path(emptyTreePath).parent_path());
-    UsefulApi::writeToFile(emptyTreeContent, emptyTreePath);
-
-    const std::string initMsg = "initial commit";
-    std::ostringstream commitContent;
-
-    commitContent << "tree " << emptyTreeSha1 << "\n\n" << initMsg << "\n";
-
-    std::string commitSha1 = UsefulApi::hash(commitContent.str());
-    std::string commitPath = ".nit/objects/" + commitSha1.substr(0, 2) + "/" + commitSha1.substr(2);
-    fs::create_directories(fs::path(commitPath).parent_path());
-    UsefulApi::writeToFile(commitContent.str(), commitPath);
-
-    // Update HEAD to point to the current commit
-    UsefulApi::writeToFile(commitSha1, ".nit/HEAD");
     
+    const std::string initMsg = "initial commit";
     commit(initMsg);
-    */
+    
 }
 
 void Commands::status() {
-    // TODO
+      // TODO
+    checkInit();
 }
 
 void Commands::add() {
-    // TODO
+      // TODO
+    checkInit();
 }
 
 void Commands::checkout() {
-    // TODO
+      // TODO
+    checkInit();
 }
 
 void Commands::log() {
-    // TODO
+      // TODO
+    checkInit();
 }
 
 void Commands::commit(const std::string& msg) { 
-      // create a commit object
-      // TODO
-    std::string commitId = "generated_commit_id";  
-    Tree*       tree     = nullptr;                
-    Commit*     parent   = commitCommand;          
+    checkInit();
+    // Assume that the file object has created successfully by "nit add" command
+    // Check file "HEAD" to tell whether the commit is the initial commit
+    // Initall commit's parent is nullptr
+    // Build Tree by reading the file "index"
+        
+    std::string headPath = UsefulApi::cwd() + "/.nit/HEAD";
+    std::string headContent;
+    std::string indexPath = UsefulApi::cwd() + "/.nit/index";
+    std::string indexContent;
 
-    commitCommand = new Commit(msg, commitId, parent, tree);
-    commitCommand->addCommit();
+    // Create tree object
+    Tree * tree;
+    std::string treeSha1;
+    std::string treeContent;
+    std::string treePath;
+
+    std::string parentSha1    = "";
+    std::string commitContent = "";
+    std::string commitSha1    = "";
+    std::string commitPath    = "";
+    
+    std::ostringstream commitContentStream;
+
+
+    if (!UsefulApi::readFromFile(indexPath, indexContent) || 
+        !UsefulApi::readFromFile(headPath, headContent)) {
+                        
+        std::cerr << "Failed to read file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    
+    if (!headContent.empty() && indexContent.empty()) {
+        std::cerr << "No changes added to the commit." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    // treeContent: Sha1 filename\n Sha1 filename\n...
+    // if tree is empty tree, then this must be the initial commit
+    treeContent = indexContent;
+    treeSha1    = UsefulApi::hash(indexContent);
+    treePath    = UsefulApi::cwd() + "/.nit/objects/" + treeSha1.substr(0, 2) + "/" + treeSha1.substr(2);
+
+    tree = new Tree(treeSha1, treeContent, treePath);
+
+    // Create commit object: Msg Tree Parent CommitSha1
+    // parentSha1 = "" when it is the initial commit
+    parentSha1 = headContent;
+
+    commitContentStream << "tree:" << treeSha1 << "\n";
+    if (!parentSha1.empty()) {
+        commitContentStream << "parent:" << parentSha1 << "\n";
+    }
+    commitContentStream << msg << "\n";
+
+    commitContent = commitContentStream.str();
+    commitSha1    = UsefulApi::hash(commitContent);
+    commitPath    = UsefulApi::cwd() + "/.nit/objects/" + commitSha1.substr(0, 2) + "/" + commitSha1.substr(2);
+
+    commitCommand = new Commit(msg, commitContent, commitSha1, commitPath, parentSha1, tree);
+    commitCommand->writeTreeCommitLogHEAD();
+
+    // TODO
+    delete tree;
 }
 
-void Commit::addCommit() {
-      // TODO
-    std::cout << "commit: " << this->msg << std::endl;
+void Commit::writeTreeCommitLogHEAD() {
+    std::string treePath = tree->getTreePath();
+    std::string logPath  = UsefulApi::cwd() + "/.nit/log";
+    std::string headPath = UsefulApi::cwd() + "/.nit/HEAD";
+
+    std::string treeContent = tree->getTreeContent();
+    std::string logContent = "===\ncommit " + commitSha1 + "\n" + msg + "\n";
+    std::string logContent_old;
+
+    if (!UsefulApi::readFromFile(logPath, logContent_old)) {
+        std::cerr << "Failed to read file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    logContent = logContent + logContent_old;
+    
+    if (!UsefulApi::writeToFile(treeContent, treePath) ||
+        !UsefulApi::writeToFile(commitContent, commitPath) ||
+        !UsefulApi::writeToFile(logContent, logPath) ||
+        !UsefulApi::writeToFile(commitSha1, headPath)) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    std::cout << "commit: "  << this->msg << std::endl << "OK!" << std::endl;
 }
 
+void Tree::addFile(const std::string& fileName, const std::string& sha1) {
+    files[fileName] = sha1;
+}
+
+std::string Tree::getTreeSha1() const {
+    return treeSha1;
+}
+
+std::string Tree::getTreeContent() const {
+    return treeContent;
+}
+
+std::string Tree::getTreePath() const {
+    return treePath;
+}
+
+const std::map<std::string, std::string>& Tree::getFiles() const {
+    return files;
+}
 
 void Parser::getArgs() {
     for (int i = 0; i < argc; i++) {
@@ -103,17 +193,18 @@ void Parser::parse() {
         commands.init();
     } else if (args[1] == "status") {
         if (args.size() != 2) printUsageAndExit();
-        // status();
+        commands.status();
     } else if (args[1] == "add") {
         if (args.size() != 3) printUsageAndExit();
-        // add();
+        commands.add();
     } else if (args[1] == "checkout") {
         if (args.size() != 3) printUsageAndExit();
-        // checkout();
+        commands.checkout();
     } else if (args[1] == "log") {
         if (args.size() != 2) printUsageAndExit();
-        // log();
+        commands.log();
     } else if (args[1] == "commit") {
+        if (args.size() == 2) std::cerr << "please enter a commit message." << std::endl;
         if (args.size() != 3) printUsageAndExit();
         commands.commit(args[2]);
     } else {
@@ -140,8 +231,4 @@ std::string Blob::getContent() const {
 
 std::string Blob::getSha1() const {
     return sha1;
-}
-
-void Tree::addFile(const std::string& fileName, std::string& sha1) {
-    files.push_back(std::make_pair(fileName, sha1));
 }

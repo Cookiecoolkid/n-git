@@ -22,5 +22,10 @@
 - ```objects```目录下的文件格式：
     - ```blob```文件格式为```content```，其中```content```为文件内容
     - ```tree```文件格式为```hash filename```，其中```hash```为文件内容的```hash```，```filename```为文件名
-    - ```commit```文件格式为```tree\nparent\nmsg```，其中```tree```为```tree```对象的```hash```，```parent```为```commit```对象的```hash```，```msg```为```commit```的```msg```
+    - ```commit```文件格式为```hash\nparent\nmsg```，其中```hash```为对应的```tree```对象的```hash```，```parent```为```commit```对象的```hash```，```msg```为```commit```的```msg```
 - 上述文件名为```hash```的前两位字符，作为目录名，后38位字符作为文件名，如```objects/12/3456789abcdef0123456789abcdef01234567```
+
+
+### ```map<std::string filename, std::string fileSha1>```
+- ```filename```为文件名，```fileSha1```为文件内容的```hash```
+- 
