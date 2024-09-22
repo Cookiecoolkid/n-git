@@ -27,6 +27,16 @@
 
 - 当 ```tree``` 为空时，若没有内容，则可能与空的```blob``` 冲突，所以需要作出区分
 
+- ```commit```会继承，此时需要做的是继承```parent```的```tree```，```index```之中只记录其修改或者新添加的文件.
+- 即当commit的时候，才开始构建 tree，将 parent 的 tree 读取出来，然后将 index 之中的文件附加进去
+- ```checkout``` 时，需要将```commit```的```tree```中的文件写入到工作区，同时更新```HEAD```文件
+
+
+- ```ADD``` 状态需要写入 ```index``` 和 ```objects``` 目录下的 ```blob``` 文件
+- ```MODIFIED_ADDED``` 状态需要写入(覆盖) ```index``` 和 ```objects``` 目录下的 ```blob``` 文件(删除原来的创建新的)
+- ```MODIFIED_COMMITED``` 状态需要写入(如果有要覆盖) ```index``` 和 ```objects``` 目录下的 ```blob``` 文件(不删除原来的，直接创建新的)
+- ```SAME``` 状态说明文件和当前 ```commit``` 其中对应文件一致，需要判定```index```是否有该文件，若有则删除该记录，不需要创建新的```blob```文件，因为```commit```会继承
+- ```REMOVE```状态，需要删除```index```中的记录，不需要删除```objects```目录下的```blob```文件
 
 ### ```map<std::string filename, std::string fileSha1>```
 - ```filename```为文件名，```fileSha1```为文件内容的```hash```

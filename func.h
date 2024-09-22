@@ -20,11 +20,14 @@ Parser(int argc, char** argv): argc(argc), argv(argv) {}
 
 class Functions {
 public: 
+    std::string processContentByLine(const std::string& srcContent, std::string& dstContent);
+    std::string getCurrentCommitTreeContent();
     std::string extractContent(const std::string& content, const std::string& start, const std::string& end);
     std::string extractContentPlus(const std::string& content, const std::string& start, const std::string& end);
     void eraseSubstrFromContent(const std::string& substr, std::string& content, const std::string& contentPath);
-    void removeLineContainingSubstringFromContent(std::string& content, const std::string& substr);
+    void removeLineContainingSubstringFromContent(std::string& content, const std::string& substr, const std::string& contentPath);
     void removeFileAndEmptyDirectory(const std::string& dir, const std::string& filename);
+    
 };
 
 
@@ -37,7 +40,8 @@ public:
         UNCHECKED,
         SAME,
         ADD,
-        MODIFIED,
+        MODIFIED_ADDED,
+        MODIFIED_COMMITED,
         REMOVED,
         NOTEXIST
     };
@@ -47,7 +51,7 @@ private:
 public                                                   : 
 Blob(const std::string& content, const std::string& sha1, const std::string& filename)
     : content(content), sha1(sha1), filename(filename) {}
-    void writeBlobAndIndex(BlobStatus status);
+    void writeBlobAndIndex();
     std::string getContent() const;
     std::string getSha1() const;
     BlobStatus getStatus() const;
