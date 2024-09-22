@@ -22,12 +22,13 @@ class Functions {
 public: 
     std::string processContentByLine(const std::string& srcContent, std::string& dstContent);
     std::string getCurrentCommitTreeContent();
+    std::string getNitContent(const std::string& filename);
     std::string extractContent(const std::string& content, const std::string& start, const std::string& end);
     std::string extractContentPlus(const std::string& content, const std::string& start, const std::string& end);
     void eraseSubstrFromContent(const std::string& substr, std::string& content, const std::string& contentPath);
     void removeLineContainingSubstringFromContent(std::string& content, const std::string& substr, const std::string& contentPath);
     void removeFileAndEmptyDirectory(const std::string& dir, const std::string& filename);
-    
+    void removeFilenameFromContent(std::string& content, const std::string& contentPath);
 };
 
 
@@ -95,10 +96,9 @@ Commit(const std::string& msg, const std :: string& commitContent, const std::st
     const std::string& commitPath, const std::string& parentSha1, Tree* tree):
     msg(msg), commitContent(commitContent), commitSha1(commitSha1), commitPath(commitPath),
     parentSha1(parentSha1), tree(tree) {}
-~Commit() {
-    // TODO
-}    
+       
     void writeTreeCommitLogHEAD();
+    void clearIndexRemove();
 };
 
 
@@ -123,6 +123,7 @@ public:
     void checkout();
     void log();
     void commit(const std::string& msg);
+    void rm(const std::string& filename);
 };
 
 #endif
