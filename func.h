@@ -12,6 +12,7 @@
 
 namespace fs = std::filesystem;
 
+
 class Functions {
 public: 
     std::string processContentByLine(const std::string& srcContent, std::string& dstContent);

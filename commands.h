@@ -36,5 +36,4 @@ public:
     void rm(const std::string& filename);
 };
 
-
 #endif 

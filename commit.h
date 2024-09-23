@@ -9,6 +9,7 @@
 #include "func.h"
 #include "tree.h"
 
+
 class Commit {
     const std::string msg           = "";
     const std::string commitContent = "";

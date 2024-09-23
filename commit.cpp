@@ -1,5 +1,6 @@
 #include "commit.h"
 
+
 void Commit::writeTreeCommitLogHEAD() {
     Functions functions;
     std::string treePath = tree->getTreePath();
