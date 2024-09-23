@@ -138,13 +138,14 @@ void Commands::add(const std::string& filename) {
 void Commands::checkout(const std::string& commitId) {
     checkInit();
     
-      // TODO Update "log"
     Functions functions;
-    std::string headContent              = functions.getNitContent("HEAD");
-    std::string indexContent             = functions.getNitContent("index");
+    std::string headContent  = functions.getNitContent("HEAD");
+    std::string indexContent = functions.getNitContent("index");
+    std::string logContent   = functions.getNitContent("log");
+        
     std::string currentCommitTreeContent = functions.getCurrentCommitTreeContent();
     std::string checkoutCommitPath               = UsefulApi::cwd() + "/.nit/objects/" + commitId.substr(0, 2) + "/" + commitId.substr(2);
-    if (!fs::exists(checkoutCommitPath)) {
+    if (!(logContent.find(commitId) != std::string::npos && fs::exists(checkoutCommitPath))) {
         std::cerr << "No commit with that id exists." << std::endl;
         std::exit(EXIT_FAILURE);
     }
@@ -167,8 +168,6 @@ void Commands::checkout(const std::string& commitId) {
             std::exit(EXIT_FAILURE);
         }
     }
-
-    //FIXME： Core Dumped Here
 
       // Delete the tracked files in current commit, but not tracked by [commitId]
     std::istringstream streamOfCurrentCommitTreeContent(currentCommitTreeContent);
@@ -200,11 +199,27 @@ void Commands::checkout(const std::string& commitId) {
         std::getline(blobStream, firstLine);
         std::string remainingContent((std::istreambuf_iterator<char>(blobStream)), std::istreambuf_iterator<char>());
         
-        if (!UsefulApi::writeToFile(blobContent, filename)) {
+        if (!UsefulApi::writeToFile(remainingContent, UsefulApi::cwd() + "/" + filename)) {
             std::cerr << "Failed to write file" << std::endl;
             std::exit(EXIT_FAILURE);
         }
     }
+      // update "log" file
+    std::istringstream logStream(logContent);
+    std::string lines;
+    while (std::getline(logStream, lines)) {
+        if (lines.find("commit " + commitId) != std::string::npos) {
+            std::string logContent_new((std::istreambuf_iterator<char>(logStream)), std::istreambuf_iterator<char>());
+            logContent_new = "===\n" + lines + "\n" + logContent_new;
+
+            if (!UsefulApi::writeToFile(logContent_new, UsefulApi::cwd() + "/.nit/log")) {
+                std::cerr << "Failed to write file" << std::endl;
+                std::exit(EXIT_FAILURE);
+            }
+            break;
+        }
+    }
+
       // Update "HEAD" file
     if (!UsefulApi::writeToFile(commitId, UsefulApi::cwd() + "/.nit/HEAD")) {
         std::cerr << "Failed to write file" << std::endl;
