@@ -23,6 +23,9 @@ public:
     void removeLineContainingSubstringFromContent(std::string& content, const std::string& substr, const std::string& contentPath);
     void removeFileAndEmptyDirectory(const std::string& dir, const std::string& filename);
     void removeFilenameFromContent(std::string& content, const std::string& contentPath);
+    void clearIndexRemove();
+    void deleteFileIfExists(const std::string& path);
+
 };
 
 #endif

@@ -12,8 +12,6 @@
 #include <filesystem>
 #include <fstream>
 
-namespace fs = std::filesystem;
-
 #ifdef TEST
 int main() {
     testInit();
@@ -24,6 +22,7 @@ int main() {
     return 0;
 }
 #else
+
 int main(int argc, char** argv) {
 	Parser parser(argc, argv);
 	parser.getArgs();

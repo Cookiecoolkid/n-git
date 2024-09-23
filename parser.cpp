@@ -23,7 +23,7 @@ void Parser::parse() {
         commands.add(args[2]);
     } else if (args[1] == "checkout") {
         if (args.size() != 3) printUsageAndExit();
-        commands.checkout();
+        commands.checkout(args[2]);
     } else if (args[1] == "log") {
         if (args.size() != 2) printUsageAndExit();
         commands.log();

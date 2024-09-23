@@ -152,3 +152,28 @@ std::string Functions::processContentByLine(const std::string& srcContent, std::
     return dstContent;
 }
 
+void Functions::deleteFileIfExists(const std::string& path) {
+    try {
+        if (fs::exists(path)) {
+            fs::remove(path);
+        } 
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    }
+}
+
+
+void Functions:: clearIndexRemove() {
+    std::string indexPath = UsefulApi::cwd() + "/.nit/index";
+    std::string removePath = UsefulApi::cwd() + "/.nit/remove";
+
+    if (!UsefulApi::writeToFile("", indexPath)) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    if (!UsefulApi::writeToFile("", removePath)) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}

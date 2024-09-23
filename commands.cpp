@@ -38,7 +38,6 @@ void Commands::init() {
 }
 
 void Commands::status() {
-      // TODO
     checkInit();
 
     std::cout << "=== Staged Files ===" << std::endl;
@@ -66,7 +65,6 @@ void Commands::status() {
 }
 
 void Commands::add(const std::string& filename) {
-    // TODO
     checkInit();
       // add: Create file blob object and write to .nit/objects
       // update file "index" after checking the file got already added/modified/removed or not
@@ -137,9 +135,83 @@ void Commands::add(const std::string& filename) {
     }
 }
 
-void Commands::checkout() {
-      // TODO
+void Commands::checkout(const std::string& commitId) {
     checkInit();
+    
+      // TODO Update "log"
+    Functions functions;
+    std::string headContent              = functions.getNitContent("HEAD");
+    std::string indexContent             = functions.getNitContent("index");
+    std::string currentCommitTreeContent = functions.getCurrentCommitTreeContent();
+    std::string checkoutCommitPath               = UsefulApi::cwd() + "/.nit/objects/" + commitId.substr(0, 2) + "/" + commitId.substr(2);
+    if (!fs::exists(checkoutCommitPath)) {
+        std::cerr << "No commit with that id exists." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    std::string checkoutCommitPathUnderNit     = "objects/" + commitId.substr(0, 2) + "/" + commitId.substr(2);
+    std::string checkoutCommitContent          = functions.getNitContent(checkoutCommitPathUnderNit);
+    std::string checkoutCommitTreeSha1         = functions.extractContent(checkoutCommitContent, "tree:", "\n");
+    std::string checkoutCommitTreePathUnderNit = "objects/" + checkoutCommitTreeSha1.substr(0, 2) + "/" + checkoutCommitTreeSha1.substr(2);
+    std::string checkoutCommitTreeContent      = functions.getNitContent(checkoutCommitTreePathUnderNit);
+      // Check Is there untracked files in current commit, but tracked by [commitId]
+    
+    std::istringstream streamOfCheckoutCommitTreeContent_1(checkoutCommitTreeContent);
+    std::string line1;
+    while (std::getline(streamOfCheckoutCommitTreeContent_1, line1)) {
+        std::istringstream lineStream(line1);
+        std::string sha1;
+        std::string filename;
+        lineStream >> sha1 >> filename;
+        if (currentCommitTreeContent.find(filename) == std::string::npos) {
+            std::cerr << "There is an untracked file in the way; delete it, or add and commit it first." << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+    }
+
+    //FIXME： Core Dumped Here
+
+      // Delete the tracked files in current commit, but not tracked by [commitId]
+    std::istringstream streamOfCurrentCommitTreeContent(currentCommitTreeContent);
+    std::string line;
+    while (std::getline(streamOfCurrentCommitTreeContent, line)) {
+        std::istringstream lineStream(line);
+        std::string sha1;
+        std::string filename;
+        lineStream >> sha1 >> filename;
+        if (checkoutCommitTreeContent.find(filename) == std::string::npos) {
+            std::string filePath = UsefulApi::cwd() + "/" + filename;
+            functions.deleteFileIfExists(filePath);
+        }
+    }
+
+      // Copy the files from [commitId] to the working directory
+    std::istringstream streamOfCheckoutCommitTreeContent_2(checkoutCommitTreeContent);
+    std::string line2;
+    while (std::getline(streamOfCheckoutCommitTreeContent_2, line2)) {
+        std::istringstream lineStream(line2);
+        std::string sha1;
+        std::string filename;
+        lineStream >> sha1 >> filename;
+
+        std::string blobContent = functions.getNitContent("objects/" + sha1.substr(0, 2) + "/" + sha1.substr(2));
+        // delete the first line "filename\n"
+        std::istringstream blobStream(blobContent);
+        std::string firstLine;
+        std::getline(blobStream, firstLine);
+        std::string remainingContent((std::istreambuf_iterator<char>(blobStream)), std::istreambuf_iterator<char>());
+        
+        if (!UsefulApi::writeToFile(blobContent, filename)) {
+            std::cerr << "Failed to write file" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+    }
+      // Update "HEAD" file
+    if (!UsefulApi::writeToFile(commitId, UsefulApi::cwd() + "/.nit/HEAD")) {
+        std::cerr << "Failed to write file" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+      // Clear "index" & "remove" file
+    functions.clearIndexRemove();      
 }
 
 void Commands::log() {
@@ -220,7 +292,6 @@ void Commands::commit(const std::string& msg) {
 }
 
 void Commands::rm(const std::string& filename) {
-    // TODO
     checkInit();
     Functions functions;
     std::string removePath        = UsefulApi::cwd() + "/.nit/remove";

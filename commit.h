@@ -24,7 +24,6 @@ Commit(const std::string& msg, const std :: string& commitContent, const std::st
     parentSha1(parentSha1), tree(tree) {}
        
     void writeTreeCommitLogHEAD();
-    void clearIndexRemove();
 };
 
 #endif

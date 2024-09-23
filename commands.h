@@ -30,7 +30,7 @@ public:
     void init();
     void status();
     void add(const std::string& filename);
-    void checkout();
+    void checkout(const std::string& commitId);
     void log();
     void commit(const std::string& msg);
     void rm(const std::string& filename);
