@@ -1,6 +1,6 @@
-CMakeFiles/nit.dir/main.cpp.o: /home/cookiecoolkid/project/nit/main.cpp \
- /usr/include/stdc-predef.h /home/cookiecoolkid/project/nit/func.h \
- /usr/include/c++/11/string \
+CMakeFiles/nit.dir/parser.cpp.o: \
+ /home/cookiecoolkid/project/nit/parser.cpp /usr/include/stdc-predef.h \
+ /home/cookiecoolkid/project/nit/parser.h /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -140,7 +140,9 @@ CMakeFiles/nit.dir/main.cpp.o: /home/cookiecoolkid/project/nit/main.cpp \
  /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/filesystem \
+ /usr/include/c++/11/bits/vector.tcc \
+ /home/cookiecoolkid/project/nit/apis.h \
+ /home/cookiecoolkid/project/nit/func.h /usr/include/c++/11/filesystem \
  /usr/include/c++/11/bits/fs_fwd.h /usr/include/c++/11/system_error \
  /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h \
  /usr/include/c++/11/stdexcept /usr/include/c++/11/exception \
@@ -183,13 +185,8 @@ CMakeFiles/nit.dir/main.cpp.o: /home/cookiecoolkid/project/nit/main.cpp \
  /usr/include/c++/11/bits/fs_ops.h /usr/include/c++/11/fstream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
- /usr/include/c++/11/bits/fstream.tcc \
- /home/cookiecoolkid/project/nit/apis.h \
- /home/cookiecoolkid/project/nit/apis.h \
- /home/cookiecoolkid/project/nit/sha1.h \
- /home/cookiecoolkid/project/nit/blob.h /usr/include/c++/11/iostream \
- /home/cookiecoolkid/project/nit/tree.h \
- /home/cookiecoolkid/project/nit/commit.h \
+ /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/iostream \
  /home/cookiecoolkid/project/nit/commands.h \
- /home/cookiecoolkid/project/nit/parser.h /usr/include/c++/11/cassert \
- /usr/include/assert.h
+ /home/cookiecoolkid/project/nit/commit.h \
+ /home/cookiecoolkid/project/nit/tree.h \
+ /home/cookiecoolkid/project/nit/blob.h

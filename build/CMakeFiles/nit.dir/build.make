@@ -125,12 +125,87 @@ CMakeFiles/nit.dir/func.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nit.dir/func.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cookiecoolkid/project/nit/func.cpp -o CMakeFiles/nit.dir/func.cpp.s
 
+CMakeFiles/nit.dir/parser.cpp.o: CMakeFiles/nit.dir/flags.make
+CMakeFiles/nit.dir/parser.cpp.o: ../parser.cpp
+CMakeFiles/nit.dir/parser.cpp.o: CMakeFiles/nit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/nit.dir/parser.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nit.dir/parser.cpp.o -MF CMakeFiles/nit.dir/parser.cpp.o.d -o CMakeFiles/nit.dir/parser.cpp.o -c /home/cookiecoolkid/project/nit/parser.cpp
+
+CMakeFiles/nit.dir/parser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nit.dir/parser.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cookiecoolkid/project/nit/parser.cpp > CMakeFiles/nit.dir/parser.cpp.i
+
+CMakeFiles/nit.dir/parser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nit.dir/parser.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cookiecoolkid/project/nit/parser.cpp -o CMakeFiles/nit.dir/parser.cpp.s
+
+CMakeFiles/nit.dir/commit.cpp.o: CMakeFiles/nit.dir/flags.make
+CMakeFiles/nit.dir/commit.cpp.o: ../commit.cpp
+CMakeFiles/nit.dir/commit.cpp.o: CMakeFiles/nit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/nit.dir/commit.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nit.dir/commit.cpp.o -MF CMakeFiles/nit.dir/commit.cpp.o.d -o CMakeFiles/nit.dir/commit.cpp.o -c /home/cookiecoolkid/project/nit/commit.cpp
+
+CMakeFiles/nit.dir/commit.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nit.dir/commit.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cookiecoolkid/project/nit/commit.cpp > CMakeFiles/nit.dir/commit.cpp.i
+
+CMakeFiles/nit.dir/commit.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nit.dir/commit.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cookiecoolkid/project/nit/commit.cpp -o CMakeFiles/nit.dir/commit.cpp.s
+
+CMakeFiles/nit.dir/commands.cpp.o: CMakeFiles/nit.dir/flags.make
+CMakeFiles/nit.dir/commands.cpp.o: ../commands.cpp
+CMakeFiles/nit.dir/commands.cpp.o: CMakeFiles/nit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/nit.dir/commands.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nit.dir/commands.cpp.o -MF CMakeFiles/nit.dir/commands.cpp.o.d -o CMakeFiles/nit.dir/commands.cpp.o -c /home/cookiecoolkid/project/nit/commands.cpp
+
+CMakeFiles/nit.dir/commands.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nit.dir/commands.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cookiecoolkid/project/nit/commands.cpp > CMakeFiles/nit.dir/commands.cpp.i
+
+CMakeFiles/nit.dir/commands.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nit.dir/commands.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cookiecoolkid/project/nit/commands.cpp -o CMakeFiles/nit.dir/commands.cpp.s
+
+CMakeFiles/nit.dir/tree.cpp.o: CMakeFiles/nit.dir/flags.make
+CMakeFiles/nit.dir/tree.cpp.o: ../tree.cpp
+CMakeFiles/nit.dir/tree.cpp.o: CMakeFiles/nit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/nit.dir/tree.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nit.dir/tree.cpp.o -MF CMakeFiles/nit.dir/tree.cpp.o.d -o CMakeFiles/nit.dir/tree.cpp.o -c /home/cookiecoolkid/project/nit/tree.cpp
+
+CMakeFiles/nit.dir/tree.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nit.dir/tree.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cookiecoolkid/project/nit/tree.cpp > CMakeFiles/nit.dir/tree.cpp.i
+
+CMakeFiles/nit.dir/tree.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nit.dir/tree.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cookiecoolkid/project/nit/tree.cpp -o CMakeFiles/nit.dir/tree.cpp.s
+
+CMakeFiles/nit.dir/blob.cpp.o: CMakeFiles/nit.dir/flags.make
+CMakeFiles/nit.dir/blob.cpp.o: ../blob.cpp
+CMakeFiles/nit.dir/blob.cpp.o: CMakeFiles/nit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/nit.dir/blob.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nit.dir/blob.cpp.o -MF CMakeFiles/nit.dir/blob.cpp.o.d -o CMakeFiles/nit.dir/blob.cpp.o -c /home/cookiecoolkid/project/nit/blob.cpp
+
+CMakeFiles/nit.dir/blob.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nit.dir/blob.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cookiecoolkid/project/nit/blob.cpp > CMakeFiles/nit.dir/blob.cpp.i
+
+CMakeFiles/nit.dir/blob.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nit.dir/blob.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cookiecoolkid/project/nit/blob.cpp -o CMakeFiles/nit.dir/blob.cpp.s
+
 # Object files for target nit
 nit_OBJECTS = \
 "CMakeFiles/nit.dir/sha1.cpp.o" \
 "CMakeFiles/nit.dir/apis.cpp.o" \
 "CMakeFiles/nit.dir/main.cpp.o" \
-"CMakeFiles/nit.dir/func.cpp.o"
+"CMakeFiles/nit.dir/func.cpp.o" \
+"CMakeFiles/nit.dir/parser.cpp.o" \
+"CMakeFiles/nit.dir/commit.cpp.o" \
+"CMakeFiles/nit.dir/commands.cpp.o" \
+"CMakeFiles/nit.dir/tree.cpp.o" \
+"CMakeFiles/nit.dir/blob.cpp.o"
 
 # External object files for target nit
 nit_EXTERNAL_OBJECTS =
@@ -139,9 +214,14 @@ nit: CMakeFiles/nit.dir/sha1.cpp.o
 nit: CMakeFiles/nit.dir/apis.cpp.o
 nit: CMakeFiles/nit.dir/main.cpp.o
 nit: CMakeFiles/nit.dir/func.cpp.o
+nit: CMakeFiles/nit.dir/parser.cpp.o
+nit: CMakeFiles/nit.dir/commit.cpp.o
+nit: CMakeFiles/nit.dir/commands.cpp.o
+nit: CMakeFiles/nit.dir/tree.cpp.o
+nit: CMakeFiles/nit.dir/blob.cpp.o
 nit: CMakeFiles/nit.dir/build.make
 nit: CMakeFiles/nit.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable nit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cookiecoolkid/project/nit/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable nit"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nit.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

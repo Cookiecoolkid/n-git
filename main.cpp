@@ -1,6 +1,11 @@
 #include "func.h"
 #include "apis.h"
 #include "sha1.h"
+#include "blob.h"
+#include "tree.h"
+#include "commit.h"
+#include "commands.h"
+#include "parser.h"
 
 #include <iostream>
 #include <cassert>

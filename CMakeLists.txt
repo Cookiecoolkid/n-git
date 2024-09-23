@@ -21,6 +21,11 @@ set(SOURCES
     apis.cpp
     main.cpp
     func.cpp
+    parser.cpp
+    commit.cpp
+    commands.cpp
+    tree.cpp
+    blob.cpp
 )
 
 # 创建可执行文件

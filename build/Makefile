@@ -153,6 +153,78 @@ apis.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/apis.cpp.s
 .PHONY : apis.cpp.s
 
+blob.o: blob.cpp.o
+.PHONY : blob.o
+
+# target to build an object file
+blob.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/blob.cpp.o
+.PHONY : blob.cpp.o
+
+blob.i: blob.cpp.i
+.PHONY : blob.i
+
+# target to preprocess a source file
+blob.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/blob.cpp.i
+.PHONY : blob.cpp.i
+
+blob.s: blob.cpp.s
+.PHONY : blob.s
+
+# target to generate assembly for a file
+blob.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/blob.cpp.s
+.PHONY : blob.cpp.s
+
+commands.o: commands.cpp.o
+.PHONY : commands.o
+
+# target to build an object file
+commands.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/commands.cpp.o
+.PHONY : commands.cpp.o
+
+commands.i: commands.cpp.i
+.PHONY : commands.i
+
+# target to preprocess a source file
+commands.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/commands.cpp.i
+.PHONY : commands.cpp.i
+
+commands.s: commands.cpp.s
+.PHONY : commands.s
+
+# target to generate assembly for a file
+commands.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/commands.cpp.s
+.PHONY : commands.cpp.s
+
+commit.o: commit.cpp.o
+.PHONY : commit.o
+
+# target to build an object file
+commit.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/commit.cpp.o
+.PHONY : commit.cpp.o
+
+commit.i: commit.cpp.i
+.PHONY : commit.i
+
+# target to preprocess a source file
+commit.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/commit.cpp.i
+.PHONY : commit.cpp.i
+
+commit.s: commit.cpp.s
+.PHONY : commit.s
+
+# target to generate assembly for a file
+commit.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/commit.cpp.s
+.PHONY : commit.cpp.s
+
 func.o: func.cpp.o
 .PHONY : func.o
 
@@ -201,6 +273,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+parser.o: parser.cpp.o
+.PHONY : parser.o
+
+# target to build an object file
+parser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/parser.cpp.o
+.PHONY : parser.cpp.o
+
+parser.i: parser.cpp.i
+.PHONY : parser.i
+
+# target to preprocess a source file
+parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/parser.cpp.i
+.PHONY : parser.cpp.i
+
+parser.s: parser.cpp.s
+.PHONY : parser.s
+
+# target to generate assembly for a file
+parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/parser.cpp.s
+.PHONY : parser.cpp.s
+
 sha1.o: sha1.cpp.o
 .PHONY : sha1.o
 
@@ -225,6 +321,30 @@ sha1.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/sha1.cpp.s
 .PHONY : sha1.cpp.s
 
+tree.o: tree.cpp.o
+.PHONY : tree.o
+
+# target to build an object file
+tree.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/tree.cpp.o
+.PHONY : tree.cpp.o
+
+tree.i: tree.cpp.i
+.PHONY : tree.i
+
+# target to preprocess a source file
+tree.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/tree.cpp.i
+.PHONY : tree.cpp.i
+
+tree.s: tree.cpp.s
+.PHONY : tree.s
+
+# target to generate assembly for a file
+tree.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nit.dir/build.make CMakeFiles/nit.dir/tree.cpp.s
+.PHONY : tree.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -237,15 +357,30 @@ help:
 	@echo "... apis.o"
 	@echo "... apis.i"
 	@echo "... apis.s"
+	@echo "... blob.o"
+	@echo "... blob.i"
+	@echo "... blob.s"
+	@echo "... commands.o"
+	@echo "... commands.i"
+	@echo "... commands.s"
+	@echo "... commit.o"
+	@echo "... commit.i"
+	@echo "... commit.s"
 	@echo "... func.o"
 	@echo "... func.i"
 	@echo "... func.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... parser.o"
+	@echo "... parser.i"
+	@echo "... parser.s"
 	@echo "... sha1.o"
 	@echo "... sha1.i"
 	@echo "... sha1.s"
+	@echo "... tree.o"
+	@echo "... tree.i"
+	@echo "... tree.s"
 .PHONY : help
 
 
