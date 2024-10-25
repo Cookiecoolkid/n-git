@@ -75,8 +75,9 @@ void Commands::add(const std::string& filename) {
     std::string indexPath    = UsefulApi::cwd() + "/.nit/index";
     std::string indexContent = functions.getNitContent("index");
 
-
-    if (!UsefulApi::readFromFile(filePath, fileContent)) {
+    std::string content = functions.getCurrentCommitTreeContent();
+    
+    if (content.find(filename) == std::string::npos && !UsefulApi::readFromFile(filePath, fileContent)) {
         std::cerr << "Try to add a removed file or file not exist" << std::endl;
         fileContent = "";
     }
@@ -123,8 +124,9 @@ void Commands::add(const std::string& filename) {
         }
 
     } else if (status == Blob::BlobStatus::REMOVED) {
-        functions.removeLineContainingSubstringFromContent(indexContent, filename, indexPath);
-
+        // functions.removeLineContainingSubstringFromContent(indexContent, filename, indexPath);
+        rm(filename);
+        
     } else if (status == Blob::BlobStatus::NOTEXIST) {
         std::cerr << "File does not exist." << std::endl;
         std::exit(EXIT_FAILURE);

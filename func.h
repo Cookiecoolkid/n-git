@@ -8,7 +8,13 @@
 #include <fstream>
 #include <apis.h>
 
+// #define DEBUG_MODE
+
+#ifdef DEBUG_MODE
 #define DEBUG(x) std::cerr << #x << " " << x << std::endl
+#else 
+#define DEBUG(x)
+#endif
 
 namespace fs = std::filesystem;
 

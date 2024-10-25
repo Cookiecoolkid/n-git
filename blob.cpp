@@ -21,12 +21,13 @@ void Blob::checkBlobState() {
     std::string indexContent = functions.getNitContent("index");
     std::string headContent = functions.getNitContent("HEAD");
     
+    std::string content = functions.getCurrentCommitTreeContent();
+
     // Can't read content means file NOTEXIST or REMOVED
     if (!UsefulApi::readFromFile(filePath, fileContent)) {
         std::string substr = filename;
-        size_t      found  = indexContent.find(substr);
 
-        if (found != std::string::npos) {
+        if (indexContent.find(substr) != std::string::npos || content.find(filename) != std::string::npos) {
             status = BlobStatus::REMOVED;
             DEBUG("Got REMOVED");
         } else {
